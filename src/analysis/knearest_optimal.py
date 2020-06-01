@@ -22,6 +22,6 @@ knn = KNeighborsClassifier()
 param_grid = {'n_neighbors': arange(2, 20)}
 # you can also test other parameters, such as knn algorithm
 # param_grid = {'n_neighbors': arange(2, 20), 'algorithm': ['kd_tree', 'ball_tree']}
-knn_gscv = GridSearchCV(knn, param_grid, cv=5, n_jobs=4)
+knn_gscv = GridSearchCV(knn, param_grid, n_jobs=4)
 knn_gscv.fit(X, Y)
 print(knn_gscv.best_params_, knn_gscv.best_score_)

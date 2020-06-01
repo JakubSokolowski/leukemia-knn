@@ -41,9 +41,10 @@ kmeans.fit(leukemia_data)
 """
 
 # === kmeans testing ===
-# Kolmogrov-Smiernov -> 11, 17, 12, 18, 4, 16, 1, 8, 13, 14, 20, 5, 7
-# SelectKBest ->        4, 17, 19, 2, 14, 18, 12, 15, 6, 10, 13, 20
-feature_index = [10] # indexes of features to use
+# best set rising => 16, 1, 18, 13, 17, 11
+# best set overall => 16, 1, 18, 13, 17, 11, 14, 5, 19, 9, 6, 10, 8
+# all => 16, 1, 18, 13, 17, 11, 3, 14, 5, 19, 12, 9, 4, 6, 10, 15, 8, 7, 2, 0
+feature_index = [16, 1, 18, 13, 17, 11, 14, 5, 19, 9, 6, 10, 8] # indexes of features to use
 leuk_class = leukimia_full.iloc[:, 20:21].values
 
 if len(feature_index) == 0:
@@ -51,7 +52,7 @@ if len(feature_index) == 0:
 else:
     leuk_rest = leukimia_full.iloc[:, feature_index].values
 
-neigh = KNeighborsClassifier(n_neighbors=9)
+neigh = KNeighborsClassifier(n_neighbors=9, metric='minkowski')
 scores = []
 
 # k = 7 -> 0.303
@@ -75,59 +76,13 @@ mean_score = np.mean(scores)
 std_score = np.std(scores)
 print("Accuracy score: %.3f (%.3f)" % (mean_score, std_score))
 print()
-print("Confusion Matrix:")
-print(con_mat_arr[0] + con_mat_arr[1] + 
-      con_mat_arr[2] + con_mat_arr[3] + 
-      con_mat_arr[4] + con_mat_arr[5] + 
-      con_mat_arr[6] + con_mat_arr[7] +
-      con_mat_arr[8] + con_mat_arr[9])
-# === / kmeans testing ===
-print()
-print(con_mat_arr[0])
-
-
 
 """
-# === Kolmogrov-Smiernov ===
-feature_score = []
-features_kolmogrov = leukimia_full.iloc[:, 0:20]
-feat_class_1, feat_class_2 = train_test_split(features_kolmogrov, test_size=0.5, random_state=42)
-for i in range(20):
-    feature_score.append(stats.ks_2samp(feat_class_1.iloc[:, i], feat_class_2.iloc[:, i]))
-
-print("Feature score Kolmogrov-Smiernov: ")
-print(pd.DataFrame(feature_score))
-print()
-# === Kolmogrov-Smiernov ===
-
-# === Kolmogrov-Smiernov 2 ===
-feature_score2 = []
-features_kolmogrov2 = leukimia_full.iloc[:, 0:20]
-for i in range(20):
-    score = 0
-    for j in range(20):
-        if j != i:
-            score += stats.ks_2samp(features_kolmogrov2.iloc[:, i], features_kolmogrov2.iloc[:,  j]).pvalue
-
-    feature_score2.append( format(score/20, '.3') )
-
-print("Feature score Kolmogrov-Smiernov 2: ")
-print(pd.DataFrame(feature_score2))
-print()
-# === / Kolmogrov-Smiernov 2 ===
-
-# === Kolmogrov-Smiernov 3 ===
-feature_score3 = []
-features_kolmogrov3 = leukimia_full.iloc[:, 0:20]
-kol_feat_1 = pd.DataFrame(features_kolmogrov3.iloc[:, 0:10].values)
-kol_feat_2 = pd.DataFrame(features_kolmogrov3.iloc[:, 10:20].values)
-for i in range(10):
-    feature_score3.append(stats.ks_2samp(kol_feat_1.iloc[:, i], kol_feat_2.iloc[:, i]))
-
-print("Feature score Kolmogrov-Smiernov 3: ")
-print(pd.DataFrame(feature_score3))
-print()
-# === / Kolmogrov-Smiernov 3 ===
+print("Confusion Matrix:")
+cos = con_mat_arr[0]
+for i in range(1, 10):
+    cos += con_mat_arr[i]
+print(cos)
 """
 
 """
